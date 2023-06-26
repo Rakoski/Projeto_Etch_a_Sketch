@@ -1,32 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Grid of Square Divs</title>
+  <title>Centered Grid of Square Divs</title>
   <style>
-    .grid {
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
       display: grid;
       grid-template-columns: repeat(16, 1fr);
       grid-template-rows: repeat(16, 1fr);
       gap: 2px;
     }
 
-    .grid div {
+    .container div {
       background-color: gray;
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
+    }
+
+    .top {
+      text-align: center;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="grid"></div>
+  <div class="top">
+    <button onclick="resetGrid()" id="topContainer">Create New Grid</button>
+  </div>
+  <div class="container"></div>
 
   <script>
-    const container = document.querySelector('.grid');
+    function resetGrid() {
+      const squaresPerSide = prompt('Enter the number of squares per side (maximum 100):');
+      const gridSize = parseInt(squaresPerSide);
 
-    for (let i = 0; i < 16; i++) {
-      for (let j = 0; j < 16; j++) {
-        const square = document.createElement('div');
-        container.appendChild(square);
+      if (!isNaN(gridSize) && gridSize > 0 && gridSize <= 100) {
+        const container = document.querySelector('.container');
+        container.innerHTML = '';
+
+        const containerWidth = container.offsetWidth;
+        const squareSize = Math.floor(containerWidth / gridSize) - 2; 
+
+        container.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+        container.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
+
+        for (let i = 0; i < gridSize; i++) {
+          for (let j = 0; j < gridSize; j++) {
+            const square = document.createElement('div');
+            square.style.width = `${squareSize}px`;
+            square.style.height = `${squareSize}px`;
+            container.appendChild(square);
+            square.addEventListener('mouseover', function() {
+                square.style.backgroundColor = 'white';
+            }); 
+          }
+        }
+
+        // hidding the button to prevent bugs. Can only use once.
+        const topContainer = document.getElementById('topContainer');
+        topContainer.style.display = 'none';
+        // if the input is NaN
+      } else {
+        alert('Invalid input. Please enter a valid number between 1 and 100.');
       }
     }
   </script>
